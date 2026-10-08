@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoClean Feedback — maqueta de la app</title>
+  <style>
+    :root {
+      --ink: #1c1c1c;
+      --muted: #5e5e5e;
+      --faint: #8a8a8a;
+      --line: #d4d4d4;
+      --line-strong: #1c1c1c;
+      --paper: #f3f3f1;
+      --card: #ffffff;
+      --fill: #ececea;
+      --ok: #2f6b3a;
+      --warn: #8a5a12;
+      --bad: #8d2f2f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 15px/1.45 "Segoe UI", system-ui, sans-serif;
+    }
+
+    button, textarea, input { font: inherit; color: inherit; }
+
+    button { cursor: pointer; }
+
+    button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+    button:focus-visible, textarea:focus-visible, input:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    .page {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 650;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.3;
+      font-weight: 650;
+    }
+
+    p { margin: 0; }
+
+    .lede { color: var(--muted); max-width: 68ch; }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 20px 0;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .pill, .btn {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 4px 10px;
+      line-height: 1.3;
+    }
+
+    .pill[aria-pressed="true"] {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .pill.sm { font-size: 12px; padding: 2px 8px; }
+
+    .btn { border-radius: 6px; padding: 6px 12px; }
+
+    .btn.primary {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .btn.ghost { background: transparent; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 340px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: var(--card);
+      overflow: hidden;
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--fill);
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--faint);
+    }
+
+    .status strong { color: var(--ink); font-weight: 650; }
+
+    .screen {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 14px;
+      min-height: 360px;
+    }
+
+    .screen h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .muted { color: var(--muted); }
+    .faint { color: var(--faint); }
+    .small { font-size: 13px; }
+    .medium { font-weight: 650; }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .row.spread { justify-content: space-between; }
+
+    .zone { display: flex; flex-direction: column; gap: 4px; }
+
+    .scores { display: flex; flex-wrap: wrap; gap: 4px; }
+
+    .note {
+      width: 100%;
+      min-height: 84px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: var(--card);
+    }
+
+    .photo {
+      border: 1px dashed var(--muted);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .photo label, .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .qr {
+      display: grid;
+      grid-template-columns: repeat(7, 12px);
+      gap: 2px;
+      width: fit-content;
+      padding: 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--fill);
+    }
+
+    .qr i {
+      width: 12px;
+      height: 12px;
+      display: block;
+      background: transparent;
+    }
+
+    .qr i.on { background: var(--ink); }
+
+    .caption { margin-top: 8px; }
+
+    .kicker {
+      font-size: 12px;
+      color: var(--faint);
+      margin-bottom: 4px;
+    }
+
+    .side { display: flex; flex-direction: column; gap: 10px; }
+
+    .side hr, .block + .block { border: 0; border-top: 1px solid var(--line); }
+
+    .callout {
+      border: 1px solid var(--line-strong);
+      background: var(--card);
+      padding: 12px 14px;
+    }
+
+    .callout strong { display: block; margin-bottom: 4px; }
+
+    .stat { min-width: 140px; }
+
+    .stat b {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 650;
+    }
+
+    .stat.bad b { color: var(--bad); }
+    .stat.ok b { color: var(--ok); }
+
+    .stat span { font-size: 12px; color: var(--muted); }
+
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      font-size: 13px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 650;
+      background: var(--fill);
+      white-space: nowrap;
+    }
+
+    tr.nueva td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
+    tr.correccion td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+    tr.resuelta td:first-child { box-shadow: inset 3px 0 0 var(--ok); }
+
+    .docs { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
+    .docs h2 { margin-top: 8px; }
+
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; }
+      .phone { max-width: none; }
+    }
+  </style>
+  <style>
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #0d47a1;
+      --blue-deep: #12315c;
+      --blue-soft: #e8f2fd;
+      --ink: #16324f;
+      --muted: #5b7190;
+      --faint: #7d93ad;
+      --line: #d3e3f5;
+      --line-strong: #1a73e8;
+      --paper: #e7f1fb;
+      --card: #ffffff;
+      --fill: #e8f2fd;
+      --ok: #1f8a4c;
+      --warn: #c47d09;
+      --bad: #d64545;
+    }
+
+    body { background: #e7f1fb; color: var(--ink); }
+
+    h1, h2, .screen h3 { color: var(--blue-deep); }
+
+    .nav { border-bottom-color: #c9ddf5; }
+
+    .pill {
+      background: #fff;
+      border-color: #b9d4f5;
+      color: var(--blue-dark);
+    }
+
+    .pill[aria-pressed="true"] {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .btn.primary {
+      background: var(--blue);
+      border-color: #1558b0;
+      color: #fff;
+    }
+
+    .btn {
+      border-color: #b9d4f5;
+      background: #fff;
+      color: var(--blue-dark);
+    }
+
+    .btn.ghost { background: transparent; color: var(--blue-dark); }
+
+    .phone {
+      max-width: 360px;
+      border: 8px solid var(--blue-deep);
+      border-radius: 32px;
+      box-shadow: 0 18px 40px rgba(18, 49, 92, 0.18);
+      background: #f5f9ff;
+    }
+
+    .status {
+      background: var(--blue-dark);
+      color: rgba(255, 255, 255, 0.88);
+      border-bottom: 0;
+    }
+
+    .status strong { color: #fff; letter-spacing: 0.02em; }
+
+    .appbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 16px 16px;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .appbar strong { font-size: 18px; }
+    .appbar span { font-size: 12px; opacity: 0.9; }
+
+    .screen {
+      background: #f5f9ff;
+      min-height: 520px;
+      padding: 16px;
+    }
+
+    .screen h3 { font-size: 20px; }
+
+    .zone {
+      background: #fff;
+      border: 1px solid #d7e6f8;
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .score {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid #b9d4f5;
+      background: #fff;
+      color: var(--blue);
+      font-weight: 700;
+      padding: 0;
+    }
+
+    .score[aria-pressed="true"] {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .score.hot[aria-pressed="true"] {
+      background: var(--bad);
+      border-color: var(--bad);
+      color: #fff;
+    }
+
+    .flag {
+      background: #fde8e8;
+      color: #c62828;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+    }
+
+    .screen .btn {
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight: 650;
+    }
+
+    .screen > .row:last-child { margin-top: auto; }
+    .screen > .row:last-child .btn { flex: 1; text-align: center; }
+
+    .note, .photo {
+      border-radius: 12px;
+      border-color: #b9d4f5;
+      background: #fff;
+    }
+
+    .photo { border-style: dashed; border-color: var(--blue); background: var(--blue-soft); }
+
+    .qr {
+      border-color: var(--blue);
+      background: #fff;
+      border-radius: 12px;
+    }
+
+    .qr i.on { background: var(--blue-dark); }
+
+    .side {
+      background: #fff;
+      border: 1px solid #d7e6f8;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .dash {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(18, 49, 92, 0.12);
+    }
+
+    .dash-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--blue);
+      color: #fff;
+      padding: 22px 24px;
+    }
+
+    .dash-head h2, .dash-head p { color: #fff; margin: 0; }
+    .dash-head .stat span { color: rgba(255, 255, 255, 0.85); }
+    .dash-head .stat b { color: #fff; }
+    .dash-body { padding: 16px 18px 20px; }
+
+    .callout {
+      background: #fff6e8;
+      border: 1px solid #f0d7a6;
+      border-radius: 12px;
+      color: #7a4e00;
+    }
+
+    th { background: var(--blue-soft); color: var(--blue-dark); }
+
+    table { border-radius: 12px; overflow: hidden; }
+
+    .docs { background: transparent; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>EcoClean Feedback</h1>
+      <p class="lede">Maqueta de la app. El cliente califica por zona en el celular y, si algo falla, el supervisor recibe la alerta al instante.</p>
+    </header>
+    <nav class="nav" id="nav" aria-label="Pantallas del prototipo"></nav>
+    <div id="stage"></div>
+    <section class="docs">
+      <div>
+        <h2>Flujo de uso</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Paso</th><th>Quién</th><th>Acción</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Cliente</td><td>El equipo llega y el cliente escanea el QR.</td></tr>
+              <tr><td>2</td><td>Cliente</td><td>Califica por zona en la llegada, a mitad o al cierre.</td></tr>
+              <tr><td>3</td><td>Cliente</td><td>Si hay un problema, deja un texto o pide atención inmediata.</td></tr>
+              <tr><td>4</td><td>Supervisor</td><td>Recibe la alerta, responde y el equipo corrige en el lugar.</td></tr>
+              <tr><td>5</td><td>Cliente</td><td>Al terminar, confirma su satisfacción final.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h2>Ideas de SCAMPER que quedan en el boceto</h2>
+        <p class="small muted" style="margin-bottom: 8px">Cada pantalla muestra una decisión del concepto EcoClean Feedback.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Pantalla</th><th>Verbo</th><th>Qué se ve en el boceto</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Entrada</td><td>Combinar</td><td>La visita se abre con QR y el aviso queda ligado al equipo que está en el lugar.</td></tr>
+              <tr><td>1 · Calificar</td><td>Modificar y adaptar</td><td>Nota por zona, del 1 al 5, como en otras apps de servicio. Una nota baja marca alerta.</td></tr>
+              <tr><td>2 · Comentar</td><td>Eliminar</td><td>Un solo texto, foto opcional y atención inmediata. Sin registro largo.</td></tr>
+              <tr><td>3 · Confirmar</td><td>Reordenar</td><td>La opinión ocurre en tres momentos, no solo cuando el equipo ya se fue.</td></tr>
+              <tr><td>4 · Supervisor</td><td>Sustituir</td><td>La queja posterior se sustituye por una alerta que se atiende durante el servicio.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const SCREENS = [
+      { id: "qr", label: "Entrada · QR" },
+      { id: "rate", label: "1 · Calificar" },
+      { id: "notes", label: "2 · Comentar" },
+      { id: "confirm", label: "3 · Confirmar" },
+      { id: "supervisor", label: "4 · Supervisor" },
+    ];
+
+    const MOMENTS = [
+      { id: "llegada", label: "Llegada" },
+      { id: "mitad", label: "Mitad" },
+      { id: "cierre", label: "Cierre" },
+    ];
+
+    const KINDS = [
+      { id: "comentario", label: "Comentario" },
+      { id: "sugerencia", label: "Sugerencia" },
+      { id: "observacion", label: "Observación" },
+    ];
+
+    const VISITS = {
+      hogar: { sitio: "Casa López", equipo: "Equipo Norte", zonas: ["Cocina", "Baños", "Sala"] },
+      oficina: { sitio: "Oficina Sol", equipo: "Equipo Centro", zonas: ["Recepción", "Baños", "Puestos"] },
+    };
+
+    const MOMENT_LABEL = { llegada: "Llegada", mitad: "Mitad", cierre: "Cierre" };
+    const STATUS_LABEL = { nueva: "Nueva", en_correccion: "En corrección", resuelta: "Resuelta" };
+    const ROW_CLASS = { nueva: "nueva", en_correccion: "correccion", resuelta: "resuelta" };
+
+    const COPY = {
+      qr: {
+        kicker: "Entrada",
+        title: "Escanear el QR",
+        purpose: "El equipo llega y el cliente abre la visita con el código que trae el personal. No hay registro ni formulario.",
+        test: "Comprobar si se entiende que el celular entra al servicio con un solo gesto.",
+      },
+      rate: {
+        kicker: "Pantalla 1",
+        title: "Calificar el servicio",
+        purpose: "La nota es por zona, no una calificación general. Un número de 1 a 3 prepara la alerta mientras el equipo sigue en el lugar.",
+        test: "Comprobar si cocina, baños y sala, con una escala del 1 al 5, se sienten rápidas.",
+      },
+      notes: {
+        kicker: "Pantalla 2",
+        title: "Comentarios, sugerencias y observaciones",
+        purpose: "Un solo texto, clasificado en un toque. La foto es opcional. Atención inmediata marca la alerta como urgente.",
+        test: "Comprobar si algún campo sobra y conviene quitarlo antes de construir la app.",
+      },
+      confirm: {
+        kicker: "Pantalla 3",
+        title: "Confirmación y seguimiento",
+        purpose: "El cliente ve que su opinión llegó. Si hubo un problema, ve la respuesta del supervisor. Puede opinar otra vez a mitad y al cierre.",
+        test: "Comprobar si el cierre da tranquilidad y si los tres momentos se entienden.",
+      },
+      supervisor: {
+        kicker: "Pantalla 4",
+        title: "Panel del supervisor",
+        purpose: "Cada problema llega con zona, nota y mensaje. Atender avisa al equipo; marcar resuelta cierra la alerta. El cliente lo ve en la confirmación.",
+        test: "Comprobar si el supervisor puede actuar sin llamar al cliente.",
+      },
+    };
+
+    const QR = [
+      1, 1, 1, 1, 1, 0, 1,
+      1, 0, 0, 0, 1, 0, 0,
+      1, 0, 1, 0, 1, 1, 1,
+      1, 0, 0, 0, 1, 0, 1,
+      1, 1, 1, 1, 1, 0, 1,
+      0, 0, 1, 0, 0, 1, 0,
+      1, 1, 0, 1, 1, 0, 1,
+    ];
+
+    function fresh() {
+      return {
+        screen: "qr",
+        place: "hogar",
+        moment: "llegada",
+        scores: {},
+        kind: "comentario",
+        note: "",
+        photo: false,
+        urgent: false,
+        cierre: "pendiente",
+        lastIds: [],
+        lastOutcome: "none",
+        alerts: [
+          {
+            id: "ej-cocina",
+            origen: "Ejemplo",
+            sitio: "Casa López",
+            equipo: "Equipo Norte",
+            moment: "llegada",
+            area: "Cocina",
+            score: 2,
+            note: "El mesón sigue con grasa.",
+            urgent: true,
+            status: "nueva",
+            response: "",
+          },
+        ],
+      };
+    }
+
+    let state = fresh();
+
+    function esc(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function visit() {
+      return VISITS[state.place];
+    }
+
+    function ratedAreas() {
+      return visit().zonas.filter((zona) => (state.scores[zona] || 0) > 0);
+    }
+
+    function lowAreas() {
+      return ratedAreas().filter((zona) => (state.scores[zona] || 0) <= 3);
+    }
+
+    function pills(items, current, action, attr) {
+      return items
+        .map((item) => {
+          const pressed = item.id === current ? "true" : "false";
+          return `<button type="button" class="pill" aria-pressed="${pressed}" data-action="${action}" data-${attr}="${item.id}">${esc(item.label)}</button>`;
+        })
+        .join("");
+    }
+
+    function qrHtml() {
+      return `<div class="qr" aria-hidden="true">${QR.map((on) => `<i class="${on ? "on" : ""}"></i>`).join("")}</div>`;
+    }
+
+    function phone(inner) {
+      const copy = COPY[state.screen];
+      return `
+        <div>
+          <section class="phone" aria-label="${esc(copy.title)}">
+            <div class="status">
+              <span>9:41</span>
+              <strong>EcoClean</strong>
+              <span>${esc(copy.kicker)}</span>
+            </div>
+            <div class="appbar">
+              <strong>EcoClean</strong>
+              <span>Feedback</span>
+            </div>
+            <div class="screen">
+              <h3>${esc(copy.title)}</h3>
+              ${inner}
+            </div>
+          </section>
+        </div>`;
+    }
+
+    function side() {
+      const copy = COPY[state.screen];
+      const rated = ratedAreas();
+      const zonas =
+        rated.length === 0
+          ? "ninguna todavía"
+          : rated.map((zona) => `${zona} ${state.scores[zona]}/5`).join(", ");
+      return `
+        <aside class="side">
+          <p class="kicker">${esc(copy.kicker)}</p>
+          <h2>${esc(copy.title)}</h2>
+          <p>${esc(copy.purpose)}</p>
+          <p class="small muted">Qué validar con clientes y colaboradores: ${esc(copy.test)}</p>
+          <hr>
+          <p class="small medium">Recorrido de esta visita</p>
+          <p class="small muted">${esc(visit().equipo)} en ${esc(visit().sitio)}. Momento actual: ${esc(MOMENT_LABEL[state.moment])}. Zonas con nota: ${esc(zonas)}.</p>
+          <div class="row">
+            <button type="button" class="btn ghost" data-action="reset">Reiniciar boceto</button>
+            <button type="button" class="btn ghost" data-action="go" data-screen="supervisor">Ir al supervisor</button>
+          </div>
+        </aside>`;
+    }
+
+    function screenQr() {
+      return phone(`
+        <p class="small muted">${esc(visit().equipo)} llegó a ${esc(visit().sitio)}. Escanea el código de la visita.</p>
+        <div class="row">
+          <button type="button" class="pill" aria-pressed="${state.place === "hogar"}" data-action="place" data-place="hogar">Hogar</button>
+          <button type="button" class="pill" aria-pressed="${state.place === "oficina"}" data-action="place" data-place="oficina">Oficina</button>
+        </div>
+        ${qrHtml()}
+        <p class="small faint">Código del equipo · sin cuenta ni formulario</p>
+        <div class="row">
+          <button type="button" class="btn primary" data-action="go" data-screen="rate">Simular escaneo</button>
+        </div>
+      `);
+    }
+
+    function screenRate() {
+      const disabled = ratedAreas().length === 0 ? "disabled" : "";
+      const zones = visit()
+        .zonas.map((zona) => {
+          const score = state.scores[zona] || 0;
+          const alert = score > 0 && score <= 3 ? `<span class="flag">Alerta</span>` : "";
+          const nums = [1, 2, 3, 4, 5]
+            .map((value) => {
+              const hot = value <= 3 ? " hot" : "";
+              return `<button type="button" class="score${hot}" aria-pressed="${score === value}" data-action="score" data-zona="${esc(zona)}" data-score="${value}">${value}</button>`;
+            })
+            .join("");
+          return `
+            <div class="zone">
+              <div class="row spread"><span class="medium">${esc(zona)}</span>${alert}</div>
+              <div class="scores">${nums}</div>
+            </div>`;
+        })
+        .join("");
+      return phone(`
+        <p class="small muted">${esc(visit().sitio)} · ${esc(visit().equipo)}</p>
+        <div class="row">${pills(MOMENTS, state.moment, "moment", "moment")}</div>
+        <p class="small faint">1 muy mal · 5 muy bien. Una nota baja avisa al supervisor.</p>
+        ${zones}
+        <div class="row">
+          <button type="button" class="btn primary" data-action="go" data-screen="notes" ${disabled}>Continuar</button>
+          <button type="button" class="btn" data-action="urgent-now" ${disabled}>Atención ahora</button>
+        </div>
+      `);
+    }
+
+    function screenNotes() {
+      const lows = lowAreas();
+      const hint = lows.length
+        ? `${lows.join(", ")} quedó en nota baja.`
+        : "Si todo está bien, el texto es opcional.";
+      const warn =
+        state.urgent || lows.length
+          ? `<p class="small muted">El supervisor recibe esta alerta al enviar.</p>`
+          : "";
+      return phone(`
+        <p class="small muted">${esc(hint)}</p>
+        <div class="row">${pills(KINDS, state.kind, "kind", "kind")}</div>
+        <textarea class="note" id="note" placeholder="Qué pasó, qué mejorar o qué observaste">${esc(state.note)}</textarea>
+        <div class="photo">
+          <label><input id="photo" type="checkbox" ${state.photo ? "checked" : ""}> ${state.photo ? "Foto adjunta" : "Adjuntar foto (opcional)"}</label>
+        </div>
+        <label class="check row spread">
+          <span>Pedir atención inmediata</span>
+          <input id="urgent" type="checkbox" ${state.urgent ? "checked" : ""}>
+        </label>
+        ${warn}
+        <div class="row">
+          <button type="button" class="btn primary" data-action="send">Enviar</button>
+          <button type="button" class="btn ghost" data-action="go" data-screen="rate">Volver</button>
+        </div>
+      `);
+    }
+
+    function screenConfirm() {
+      const current = visit();
+      const outcomes = {
+        alerta: `<p class="medium">Opinión enviada. El supervisor ya fue avisado.</p>`,
+        sugerencia: `<p class="medium">Sugerencia guardada para capacitar al equipo. No interrumpe al supervisor.</p>`,
+        bien: `<p class="medium">Servicio en buen nivel. No se generó una alerta.</p>`,
+        none: `<p class="small muted">Desde aquí el cliente confirma lo enviado y, al cierre, su satisfacción final.</p>`,
+      };
+      const scores = ratedAreas()
+        .map(
+          (zona) =>
+            `<div class="row spread"><span class="small">${esc(zona)}</span><span class="small medium">${state.scores[zona]}/5</span></div>`,
+        )
+        .join("");
+      const kind = KINDS.find((item) => item.id === state.kind);
+      const note = state.note.trim()
+        ? `<p class="small muted">${esc(kind.label)}: ${esc(state.note.trim())}${state.photo ? " · con foto" : ""}</p>`
+        : "";
+      const last = state.alerts.filter((alert) => state.lastIds.includes(alert.id));
+      const follow = last.length
+        ? `<div><p class="small medium">Seguimiento</p>${last
+            .map(
+              (alert) =>
+                `<p class="small muted">${esc(alert.area)}: ${esc(STATUS_LABEL[alert.status])}${alert.response ? `. ${esc(alert.response)}` : ""}</p>`,
+            )
+            .join("")}</div>`
+        : "";
+      const cierre =
+        state.moment === "cierre"
+          ? `<div>
+              <p class="small">Satisfacción final de la visita</p>
+              <div class="row">
+                <button type="button" class="pill" aria-pressed="${state.cierre === "satisfecho"}" data-action="cierre" data-cierre="satisfecho">Satisfecho</button>
+                <button type="button" class="pill" aria-pressed="${state.cierre === "insatisfecho"}" data-action="cierre" data-cierre="insatisfecho">Aún no</button>
+              </div>
+            </div>`
+          : `<p class="small faint">Puedes volver a opinar en el siguiente momento del servicio.</p>`;
+      const next =
+        state.moment !== "cierre"
+          ? `<button type="button" class="btn primary" data-action="advance">Siguiente momento</button>`
+          : "";
+      return phone(`
+        <p class="small muted">${esc(MOMENT_LABEL[state.moment])} · ${esc(current.sitio)}</p>
+        ${outcomes[state.lastOutcome] || ""}
+        ${scores}
+        ${note}
+        ${follow}
+        ${cierre}
+        <div class="row">
+          ${next}
+          <button type="button" class="btn" data-action="go" data-screen="supervisor">Ver supervisor</button>
+        </div>
+      `);
+    }
+
+    function screenSupervisor() {
+      const pending = state.alerts.filter((alert) => alert.status === "nueva").length;
+      const callout = pending
+        ? `<div class="callout"><strong>Hay zonas por corregir</strong><p class="small">Atiende la alerta para que el cliente vea la respuesta en la pantalla de confirmación. Después márcala resuelta cuando el equipo termine.</p></div>`
+        : "";
+      const rows = state.alerts
+        .map((alert) => {
+          const message = alert.response
+            ? `${alert.note || "Sin texto"} · ${alert.response}`
+            : alert.note || "Sin texto";
+          const label =
+            alert.status === "nueva"
+              ? "Atender"
+              : alert.status === "en_correccion"
+                ? "Marcar resuelta"
+                : "Resuelta";
+          const variant = alert.status === "resuelta" ? "ghost" : "primary";
+          const disabled = alert.status === "resuelta" ? "disabled" : "";
+          return `<tr class="${ROW_CLASS[alert.status]}">
+            <td>${esc(alert.origen)}</td>
+            <td>${esc(alert.sitio)}</td>
+            <td>${esc(MOMENT_LABEL[alert.moment])}</td>
+            <td>${esc(alert.area)}</td>
+            <td>${alert.score > 0 ? `${alert.score}/5` : "—"}</td>
+            <td>${esc(message)}</td>
+            <td>${esc(STATUS_LABEL[alert.status])}</td>
+            <td><button type="button" class="btn ${variant}" data-action="attend" data-id="${esc(alert.id)}" ${disabled}>${label}</button></td>
+          </tr>`;
+        })
+        .join("");
+      return `
+        <section class="dash">
+          <div class="dash-head">
+            <div>
+              <h2>Panel del supervisor</h2>
+              <p class="small">Misma visita, otro rol. El aviso llega sin llamada y sin formulario.</p>
+            </div>
+            <div class="stat">
+              <b>${pending}</b>
+              <span>Alertas sin atender</span>
+            </div>
+          </div>
+          <div class="dash-body">
+          ${callout}
+          <div class="table-wrap" style="margin-top: 12px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Origen</th><th>Sitio</th><th>Momento</th><th>Zona</th><th>Nota</th><th>Mensaje</th><th>Estado</th><th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <div class="row" style="margin-top: 12px">
+            <button type="button" class="btn" data-action="go" data-screen="confirm">Volver al cliente</button>
+            <button type="button" class="btn ghost" data-action="reset">Reiniciar boceto</button>
+          </div>
+          <p class="small muted" style="margin-top: 16px">${esc(COPY.supervisor.purpose)}</p>
+          <p class="small faint">Qué validar con clientes y colaboradores: ${esc(COPY.supervisor.test)}</p>
+          </div>
+        </section>`;
+    }
+
+    function render() {
+      document.getElementById("nav").innerHTML = SCREENS.map(
+        (item) =>
+          `<button type="button" class="pill" aria-pressed="${state.screen === item.id}" data-action="go" data-screen="${item.id}">${esc(item.label)}</button>`,
+      ).join("");
+
+      const client = state.screen !== "supervisor";
+      const inner =
+        state.screen === "qr"
+          ? screenQr()
+          : state.screen === "rate"
+            ? screenRate()
+            : state.screen === "notes"
+              ? screenNotes()
+              : state.screen === "confirm"
+                ? screenConfirm()
+                : screenSupervisor();
+
+      document.getElementById("stage").innerHTML = client
+        ? `<div class="layout">${inner}${side()}</div>`
+        : inner;
+    }
+
+    function sendFeedback() {
+      const current = visit();
+      const lows = current.zonas.filter((zona) => {
+        const score = state.scores[zona] || 0;
+        return score > 0 && score <= 3;
+      });
+      const hasNote = state.note.trim().length > 0;
+      const problem =
+        state.urgent || lows.length > 0 || (hasNote && state.kind !== "sugerencia");
+      const suggestionOnly = hasNote && state.kind === "sugerencia" && !problem;
+
+      if (!problem) {
+        state.screen = "confirm";
+        state.lastIds = [];
+        state.lastOutcome = suggestionOnly ? "sugerencia" : "bien";
+        render();
+        return;
+      }
+
+      const areas = lows.length ? lows : ["General"];
+      const created = areas.map((area, index) => ({
+        id: "p-" + Date.now() + "-" + index,
+        origen: "Esta prueba",
+        sitio: current.sitio,
+        equipo: current.equipo,
+        moment: state.moment,
+        area,
+        score: area === "General" ? 0 : state.scores[area] || 0,
+        note: state.note.trim(),
+        urgent: state.urgent,
+        status: "nueva",
+        response: "",
+      }));
+      state.alerts = state.alerts.concat(created);
+      state.lastIds = created.map((alert) => alert.id);
+      state.lastOutcome = "alerta";
+      state.screen = "confirm";
+      render();
+    }
+
+    function advanceMoment() {
+      state.screen = "rate";
+      state.moment = state.moment === "llegada" ? "mitad" : "cierre";
+      state.scores = {};
+      state.note = "";
+      state.photo = false;
+      state.urgent = false;
+      state.kind = "comentario";
+      state.lastIds = [];
+      state.lastOutcome = "none";
+      render();
+    }
+
+    function attend(id) {
+      state.alerts = state.alerts.map((alert) => {
+        if (alert.id !== id) return alert;
+        if (alert.status === "nueva") {
+          return {
+            ...alert,
+            status: "en_correccion",
+            response: "El equipo corrige esa zona ahora.",
+          };
+        }
+        if (alert.status === "en_correccion") {
+          return { ...alert, status: "resuelta" };
+        }
+        return alert;
+      });
+      render();
+    }
+
+    document.getElementById("stage").addEventListener("input", (event) => {
+      if (event.target.id === "note") state.note = event.target.value;
+    });
+
+    document.getElementById("stage").addEventListener("change", (event) => {
+      if (event.target.id === "photo") {
+        state.photo = event.target.checked;
+        render();
+      }
+      if (event.target.id === "urgent") {
+        state.urgent = event.target.checked;
+        render();
+      }
+    });
+
+    function onClick(event) {
+      const el = event.target.closest("[data-action]");
+      if (!el || el.disabled) return;
+      const action = el.dataset.action;
+      if (action === "go") state.screen = el.dataset.screen;
+      else if (action === "place") {
+        state.place = el.dataset.place;
+        state.scores = {};
+      } else if (action === "moment") state.moment = el.dataset.moment;
+      else if (action === "score") {
+        state.scores = { ...state.scores, [el.dataset.zona]: Number(el.dataset.score) };
+      } else if (action === "kind") state.kind = el.dataset.kind;
+      else if (action === "urgent-now") {
+        state.urgent = true;
+        state.screen = "notes";
+      } else if (action === "send") {
+        sendFeedback();
+        return;
+      } else if (action === "advance") {
+        advanceMoment();
+        return;
+      } else if (action === "cierre") state.cierre = el.dataset.cierre;
+      else if (action === "attend") {
+        attend(el.dataset.id);
+        return;
+      } else if (action === "reset") {
+        state = fresh();
+      }
+      render();
+    }
+
+    document.getElementById("nav").addEventListener("click", onClick);
+    document.getElementById("stage").addEventListener("click", onClick);
+    render();
+  </script>
+</body>
+</html>
